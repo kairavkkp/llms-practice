@@ -2,6 +2,7 @@ import re
 import tiktoken
 from importlib.metadata import version
 from simple_tokenizer_v1 import SimpleTokenizerV1
+from supplementary import create_dataloader_v1
 
 print("torch version: ", version("torch"))
 print("tiktoken version: ", version("tiktoken"))
@@ -38,3 +39,11 @@ tokenizer = tiktoken.get_encoding("gpt2")
 text = "Hello, do you like tea? <|endoftext|> In the sunlit terraces of someunknownPlace."
 integers = tokenizer.encode(text, allowed_special={"<|endoftext|>"})
 print("DEBUG: Integers from tiktoken: ", integers)
+
+# Data Sampling with Sliding Window
+dataloader = create_dataloader_v1(text=raw_text, batch_size=8, max_length=4, stride=4, shuffle=False)
+
+data_iter = iter(dataloader)
+inputs, targets = next(data_iter)
+print("Inputs:\n", inputs)
+print("Targets:\n", targets)
